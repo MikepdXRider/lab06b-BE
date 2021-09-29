@@ -28,7 +28,7 @@ async function run() {
     await Promise.all(
       teas.map(tea => {
         return client.query(`
-                    INSERT INTO teas (name, cool_factor, owner_id)
+                    INSERT INTO teas (tea, type, description, north_america_native, url, id)
                     VALUES ($1, $2, $3, $4, $5, $6);
                 `,
         [tea.tea, tea.type, tea.description, tea.north_america_native, tea.url, user.id]);

@@ -23,6 +23,7 @@ async function run() {
                     type VARCHAR(512) NOT NULL,
                     description VARCHAR(512) NOT NULL,
                     north_america_native VARCHAR(512) NOT NULL,
+                    url VARCHAR(512) NOT NULL,
                     owner_id INTEGER NOT NULL REFERENCES users(id)
             );
         `);
@@ -39,3 +40,4 @@ async function run() {
   }
 
 }
+

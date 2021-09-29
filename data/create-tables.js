@@ -19,7 +19,7 @@ async function run() {
                 );           
                 CREATE TABLE teas (
                     id SERIAL PRIMARY KEY NOT NULL,
-                    tea VARCHAR(512) NOT NULL,
+                    tea_name VARCHAR(512) NOT NULL,
                     type VARCHAR(512) NOT NULL,
                     description VARCHAR(512) NOT NULL,
                     north_america_native VARCHAR(512) NOT NULL,

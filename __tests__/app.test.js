@@ -151,23 +151,63 @@ describe('app routes', () => {
         owner_id: 1
       };
 
-      const data = await fakeRequest(app)
+      const returningData = await fakeRequest(app)
         .post('/teas')
+        .send({
+          id: expect.any(Number),
+          tea_name: 'Darjeeling',
+          type: 'Black',
+          description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
+          north_america_native: 'false',
+          url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
+          owner_id: 1
+        })
         .expect('Content-Type', /json/)
         .expect(200);
   
-
-      expect(data.body).toEqual(expectation);
+      const trueData = await fakeRequest(app)
+        .get('/teas')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      expect(returningData.body).toEqual(expectation);
+      expect(trueData.body).toEqual(expect.arrayContaining([expectation]));
     });
 
-    // Test POST
-    //  - Make post request
-    //  - Make get request 
-    //    - Check if new item is inside the request response
+    // TEST put
+    test('updates a table row', async() => {
 
-    // TEST PUT
-    //  - Make put request
-    //  - Make get request 
-    //    - Check if updated item is inside the request response
+      const expectation = {
+        id: 2,
+        tea_name: 'Turkey Breakfast',
+        type: 'Black',
+        description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
+        north_america_native: 'false',
+        url: 'https://cdnimg.webstaurantstore.com/images/products/large/542790/1993727.jpg',
+        owner_id: 1
+      };
+
+      const returningData = await fakeRequest(app)
+        .put('/teas/2')
+        .send({
+          id: 2,
+          tea_name: 'Turkey Breakfast',
+          type: 'Black',
+          description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
+          north_america_native: 'false',
+          url: 'https://cdnimg.webstaurantstore.com/images/products/large/542790/1993727.jpg',
+          owner_id: 1
+        })
+        .expect('Content-Type', /json/)
+        .expect(200);
+  
+      const trueData = await fakeRequest(app)
+        .get('/teas')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      expect(returningData.body).toEqual(expectation);
+      expect(trueData.body).toEqual(expect.arrayContaining([expectation]));
+    });
   });
 });

@@ -28,8 +28,9 @@ describe('app routes', () => {
     afterAll(done => {
       return client.end(done);
     });
-
-    test('returns animals', async() => {
+    
+    // returns all teas
+    test('returns teas', async() => {
 
       const expectation = [
         {
@@ -86,6 +87,8 @@ describe('app routes', () => {
 
       expect(data.body).toEqual(expectation);
     });
+
+    // returns a single tea per ID
     test('returns teas per ID', async() => {
 
       const expectation = {
@@ -106,10 +109,56 @@ describe('app routes', () => {
       expect(data.body).toEqual(expectation);
     });
 
+
     // Test DELETE
-    //  - Make delete request
-    //  - Make get request 
-    //    - Check if deleted item is inside the request response
+    test('deletes table row per ID', async() => {
+
+      const expectation = {
+        id: 1,
+        tea_name: 'Darjeeling',
+        type: 'Black',
+        description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
+        north_america_native: 'false',
+        url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
+        owner_id: 1
+      };
+
+      const data = await fakeRequest(app)
+        .delete('/teas/1')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      const data2 = await fakeRequest(app)
+        .get('/teas')
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(data.body).toEqual(expectation);
+      expect(data2.body).toEqual(expect.not.arrayContaining([expectation]));
+    });
+
+
+    // Test POST
+    test('creates a new table row', async() => {
+
+      const expectation = {
+        id: expect.any(Number),
+        tea_name: 'Darjeeling',
+        type: 'Black',
+        description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
+        north_america_native: 'false',
+        url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
+        owner_id: 1
+      };
+
+      const data = await fakeRequest(app)
+        .post('/teas')
+        .expect('Content-Type', /json/)
+        .expect(200);
+  
+
+      expect(data.body).toEqual(expectation);
+    });
 
     // Test POST
     //  - Make post request

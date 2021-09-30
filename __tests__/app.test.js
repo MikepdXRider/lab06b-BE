@@ -86,7 +86,7 @@ describe('app routes', () => {
 
       expect(data.body).toEqual(expectation);
     });
-    test('returns animals', async() => {
+    test('returns teas per ID', async() => {
 
       const expectation = {
         id: 1,
@@ -105,5 +105,20 @@ describe('app routes', () => {
 
       expect(data.body).toEqual(expectation);
     });
+
+    // Test DELETE
+    //  - Make delete request
+    //  - Make get request 
+    //    - Check if deleted item is inside the request response
+
+    // Test POST
+    //  - Make post request
+    //  - Make get request 
+    //    - Check if new item is inside the request response
+
+    // TEST PUT
+    //  - Make put request
+    //  - Make get request 
+    //    - Check if updated item is inside the request response
   });
 });

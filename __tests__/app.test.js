@@ -29,6 +29,7 @@ describe('app routes', () => {
       return client.end(done);
     });
     
+    
     // returns all teas
     test('returns teas', async() => {
 
@@ -87,6 +88,7 @@ describe('app routes', () => {
 
       expect(data.body).toEqual(expectation);
     });
+
 
     // returns a single tea per ID
     test('returns teas per ID', async() => {
@@ -173,6 +175,7 @@ describe('app routes', () => {
       expect(returningData.body).toEqual(expectation);
       expect(trueData.body).toEqual(expect.arrayContaining([expectation]));
     });
+
 
     // TEST put
     test('updates a table row', async() => {

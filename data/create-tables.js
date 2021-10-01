@@ -22,7 +22,7 @@ async function run() {
                     tea_name VARCHAR(512) NOT NULL,
                     type VARCHAR(512) NOT NULL,
                     description VARCHAR(512) NOT NULL,
-                    north_america_native VARCHAR(512) NOT NULL,
+                    north_america_native BOOLEAN NOT NULL,
                     url VARCHAR(512) NOT NULL,
                     owner_id INTEGER NOT NULL REFERENCES users(id)
             );

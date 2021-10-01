@@ -300,7 +300,7 @@ describe('app routes', () => {
     });
 
     // test get throws 400 error
-    test('delete throws 400 error caused by a mispelled endpoint', async() => {
+    test('get all throws 400 error caused by a mispelled endpoint', async() => {
 
       const returningData = await fakeRequest(app)
         .get('/%teas')
@@ -311,7 +311,7 @@ describe('app routes', () => {
     });
 
     // test get by ID throws 400 error
-    test('delete throws 400 error caused by a mispelled endpoint', async() => {
+    test('get by id throws 400 error caused by a mispelled endpoint', async() => {
 
       const returningData = await fakeRequest(app)
         .get('/%teas/2')
@@ -321,6 +321,6 @@ describe('app routes', () => {
       expect(returningData.status).toBe(404);
     });
 
-    // Can't figure out how to test a 500 error on a delete request.
+    // Can't figure out how to test a 500 error on a delete or get requests.
   });
 });

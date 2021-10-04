@@ -20,7 +20,6 @@ async function run() {
                 CREATE TABLE tea_types (
                     id SERIAL PRIMARY KEY,
                     tea_type VARCHAR(512) NOT NULL,
-                    owner_id INTEGER NOT NULL REFERENCES users(id)
                 );           
                 CREATE TABLE teas (
                     id SERIAL PRIMARY KEY NOT NULL,

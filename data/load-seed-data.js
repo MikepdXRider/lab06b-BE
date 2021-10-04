@@ -33,10 +33,10 @@ async function run() {
     await Promise.all(
       teaTypes.map(teaType => {
         return client.query(`
-                    INSERT INTO tea_types (tea_type, owner_id)
-                    VALUES ($1, $2);
+                    INSERT INTO tea_types (tea_type)
+                    VALUES ($1);
                 `,
-        [teaType.tea_type, user.id]);
+        [teaType.tea_type]);
       })
     );
     

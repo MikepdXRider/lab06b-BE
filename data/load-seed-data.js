@@ -13,6 +13,7 @@ async function run() {
   try {
     await client.connect();
 
+    // Populates users table with users information.
     const users = await Promise.all(
       usersData.map(user => {
         const hash = bcrypt.hashSync(user.password, 8);
@@ -24,9 +25,11 @@ async function run() {
         [user.email, hash]);
       })
     );
-      
+
+    // Grabs first users first row. 
     const user = users[0].rows[0];
 
+    // Populates teas sql table with teas information.
     await Promise.all(
       teas.map(tea => {
         return client.query(`
@@ -36,11 +39,12 @@ async function run() {
         [tea.tea_name, tea.type, tea.description, tea.north_america_native, tea.url, user.id]);
       })
     );
-
+    
+    // Populates tea_types sql table with tea_type values. 
     await Promise.all(
       teaTypes.map(teaType => {
         return client.query(`
-                    INSERT INTO teas (tea_name, owner_id)
+                    INSERT INTO tea_types (tea_name, owner_id)
                     VALUES ($1, $2);
                 `,
         [teaType.tea_type, user.id]);

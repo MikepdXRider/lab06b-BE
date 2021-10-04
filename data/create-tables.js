@@ -17,10 +17,14 @@ async function run() {
                     email VARCHAR(256) NOT NULL,
                     hash VARCHAR(512) NOT NULL
                 );           
+                CREATE TABLE tea_types (
+                    id SERIAL PRIMARY KEY,
+                    tea_type VARCHAR(512) NOT NULL,
+                );           
                 CREATE TABLE teas (
                     id SERIAL PRIMARY KEY NOT NULL,
                     tea_name VARCHAR(512) NOT NULL,
-                    type VARCHAR(512) NOT NULL,
+                    type INTEGER NOT NULL REFERENCES tea_types(id)
                     description VARCHAR(512) NOT NULL,
                     north_america_native BOOLEAN NOT NULL,
                     url VARCHAR(512) NOT NULL,

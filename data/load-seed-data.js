@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
 const client = require('../lib/client');
 // import our seed data:
-const teas = require('./data.js');
+const teas = require('./tea-data.js');
 // import our seed sub-data:
-const teaTypes = require('./tea-type-data.js');s
+const teaTypes = require('./tea-type-data.js');
 const usersData = require('./users.js');
 const { getEmoji } = require('../lib/emoji.js');
 run();
@@ -25,10 +25,21 @@ async function run() {
         [user.email, hash]);
       })
     );
-
+    
     // Grabs first users first row. 
     const user = users[0].rows[0];
-
+    
+    // Populates tea_types sql table with tea_type values. 
+    await Promise.all(
+      teaTypes.map(teaType => {
+        return client.query(`
+                    INSERT INTO tea_types (tea_type, owner_id)
+                    VALUES ($1, $2);
+                `,
+        [teaType.tea_type, user.id]);
+      })
+    );
+    
     // Populates teas sql table with teas information.
     await Promise.all(
       teas.map(tea => {
@@ -37,17 +48,6 @@ async function run() {
                     VALUES ($1, $2, $3, $4, $5, $6);
                 `,
         [tea.tea_name, tea.type, tea.description, tea.north_america_native, tea.url, user.id]);
-      })
-    );
-    
-    // Populates tea_types sql table with tea_type values. 
-    await Promise.all(
-      teaTypes.map(teaType => {
-        return client.query(`
-                    INSERT INTO tea_types (tea_name, owner_id)
-                    VALUES ($1, $2);
-                `,
-        [teaType.tea_type, user.id]);
       })
     );
     

@@ -11,7 +11,6 @@ async function run() {
     await client.connect();
 
     // run a query to create tables
-    // ❗ creates tables teas 'type' to type_id
     await client.query(`
                 CREATE TABLE users (
                     id SERIAL PRIMARY KEY,
@@ -25,7 +24,7 @@ async function run() {
                 CREATE TABLE teas (
                     id SERIAL PRIMARY KEY NOT NULL,
                     tea_name VARCHAR(512) NOT NULL,
-                    type INTEGER NOT NULL REFERENCES tea_types(id),
+                    type_id INTEGER NOT NULL REFERENCES tea_types(id),
                     description VARCHAR(512) NOT NULL,
                     north_america_native BOOLEAN NOT NULL,
                     url VARCHAR(512) NOT NULL,

@@ -1,6 +1,7 @@
 module.exports = [
   {
     tea_name: 'Darjeeling',
+    // ❗ this to be a string. A function will update values in load-seed-data.js 
     type: 1,
     description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
     north_america_native: 'false',
@@ -8,6 +9,7 @@ module.exports = [
   },
   {
     tea_name: 'English Breakfast',
+    // ❗ this to be a string. A function will update values in load-seed-data.js 
     type: 1,
     description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
     north_america_native: 'false',
@@ -15,6 +17,7 @@ module.exports = [
   },
   {
     tea_name: 'Matcha',
+    // ❗ this to be a string. A function will update values in load-seed-data.js 
     type: 2,
     description: 'matcha',
     north_america_native: 'false',
@@ -22,6 +25,7 @@ module.exports = [
   },
   {
     tea_name: 'Mint',
+    // ❗ this to be a string. A function will update values in load-seed-data.js 
     type: 2,
     description: 'Tastes like mint leaves and helps to soothe upset stomachs.',
     north_america_native: 'false',
@@ -29,6 +33,7 @@ module.exports = [
   },
   {
     tea_name: 'Chamomile',
+    // ❗ this to be a string. A function will update values in load-seed-data.js 
     type: 3,
     description: 'Is known for its soothing properties with a floral flavoring.',
     north_america_native: 'false',

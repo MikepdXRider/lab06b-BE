@@ -44,11 +44,12 @@ async function run() {
     // Populates teas sql table with teas information.
     await Promise.all(
       teas.map(tea => {
+        // ❗ import a function from utils.js here which takes in the tea.type, makes a query to SQL DB for tea_types.id where tea_types.tea_type = tea.type. Return the ID and save it to a variable.
         return client.query(`
                     INSERT INTO teas (tea_name, type, description, north_america_native, url, owner_id)
                     VALUES ($1, $2, $3, $4, $5, $6);
                 `,
-        [tea.tea_name, tea.type, tea.description, tea.north_america_native, tea.url, user.id]);
+        [tea.tea_name, tea.type/*❗ this to be the returned value from the above function*/, tea.description, tea.north_america_native, tea.url, user.id]);
       })
     );
     

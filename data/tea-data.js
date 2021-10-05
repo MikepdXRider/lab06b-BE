@@ -16,7 +16,7 @@ module.exports = [
   {
     tea_name: 'Matcha',
     type: 2,
-    description: 'matcha desciption',
+    description: 'matcha',
     north_america_native: 'false',
     url: 'https://www.nishikidori.com/579-large_default/organic-matcha-tea-from-nishio-aichi-premium-quality.jpg'
   },

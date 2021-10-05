@@ -6,6 +6,7 @@ const teas = require('./tea-data.js');
 const teaTypes = require('./tea-type-data.js');
 const usersData = require('./users.js');
 const { getEmoji } = require('../lib/emoji.js');
+// const retrieveTeaTypeId = require('../lib/utils.js');
 run();
 
 async function run() {

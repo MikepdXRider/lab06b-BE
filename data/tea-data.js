@@ -16,7 +16,7 @@ module.exports = [
   {
     tea_name: 'Matcha',
     type: 2,
-    description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
+    description: 'matcha desciption',
     north_america_native: 'false',
     url: 'https://www.nishikidori.com/579-large_default/organic-matcha-tea-from-nishio-aichi-premium-quality.jpg'
   },

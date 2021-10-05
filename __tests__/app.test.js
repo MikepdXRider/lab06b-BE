@@ -30,52 +30,52 @@ describe('app routes', () => {
     });
     
     // returns all teas
-    test('returns teas', async() => {
+    test('returns teas w/ joined data', async() => {
 
       const expectation = [
         {
-          id: 1,
-          tea_name: 'Darjeeling',
-          type: 'Black',
-          description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
-          north_america_native: false,
-          url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
-          owner_id: 1
-        },
-        {
           id: 2,
           tea_name: 'English Breakfast',
-          type: 'Black',
           description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
-          north_america_native: false,
           url: 'https://cdnimg.webstaurantstore.com/images/products/large/542790/1993727.jpg',
+          tea_type: 'black',
+          north_america_native: false,
           owner_id: 1
         },
         {
-          id: 3,
-          tea_name: 'Matcha',
-          type: 'Green',
-          description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
+          id: 1,
+          tea_name: 'Darjeeling',
+          description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
+          url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
+          tea_type: 'black',
           north_america_native: false,
-          url: 'https://www.nishikidori.com/579-large_default/organic-matcha-tea-from-nishio-aichi-premium-quality.jpg',
           owner_id: 1
         },
         {
           id: 4,
           tea_name: 'Mint',
-          type: 'Green',
           description: 'Tastes like mint leaves and helps to soothe upset stomachs.',
-          north_america_native: false,
           url: 'https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/325242_1100-1100x628.jpg',
+          tea_type: 'green',
+          north_america_native: false,
+          owner_id: 1
+        },
+        {
+          id: 3,
+          tea_name: 'Matcha',
+          description: 'matcha desciption',
+          url: 'https://www.nishikidori.com/579-large_default/organic-matcha-tea-from-nishio-aichi-premium-quality.jpg',
+          tea_type: 'green',
+          north_america_native: false,
           owner_id: 1
         },
         {
           id: 5,
           tea_name: 'Chamomile',
-          type: 'herbal',
           description: 'Is known for its soothing properties with a floral flavoring.',
-          north_america_native: false,
           url: 'https://post.healthline.com/wp-content/uploads/2020/09/chamomile-tea-thumb-1-732x549.jpg',
+          tea_type: 'herbal',
+          north_america_native: false,
           owner_id: 1
         }
       ];
@@ -88,16 +88,33 @@ describe('app routes', () => {
       expect(data.body).toEqual(expectation);
     });
 
+    // returns all tea_types
+    test('returns tea-types w/ joined data', async() => {
+
+      const expectation = [
+        { id: 1, tea_type: 'black' },
+        { id: 2, tea_type: 'green' },
+        { id: 3, tea_type: 'herbal' }
+      ];
+
+      const data = await fakeRequest(app)
+        .get('/tea-types')
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(data.body).toEqual(expectation);
+    });
+
     // returns a single tea per ID
-    test('returns teas per ID', async() => {
+    test('returns tea per ID w/ joined data', async() => {
 
       const expectation = {
         id: 1,
         tea_name: 'Darjeeling',
-        type: 'Black',
         description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
-        north_america_native: false,
         url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
+        tea_type: 'black',
+        north_america_native: false,
         owner_id: 1
       };
 
@@ -110,12 +127,22 @@ describe('app routes', () => {
     });
 
     // Test DELETE
-    test('deletes table row per ID', async() => {
+    test('deletes teas table row per ID', async() => {
 
-      const expectation = {
+      const expectedReturn = {
         id: expect.any(Number),
         tea_name: 'Darjeeling',
-        type: 'Black',
+        type: 1,
+        description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
+        north_america_native: false,
+        url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
+        owner_id: 1
+      };
+
+      const expectedGet = {
+        id: expect.any(Number),
+        tea_name: 'Darjeeling',
+        tea_type: 'black',
         description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
         north_america_native: false,
         url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
@@ -132,20 +159,30 @@ describe('app routes', () => {
         .expect('Content-Type', /json/)
         .expect(200);
 
-      expect(data.body).toEqual(expectation);
-      expect(data2.body).toEqual(expect.not.arrayContaining([expectation]));
+      expect(data.body).toEqual(expectedReturn);
+      expect(data2.body).toEqual(expect.not.arrayContaining([expectedGet]));
     });
 
     // Test POST
-    test('creates a new table row', async() => {
+    test('creates a new teas table row', async() => {
 
-      const expectation = {
+      const expectedReturn = {
         id: expect.any(Number),
-        tea_name: 'Darjeeling',
-        type: 'Black',
-        description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
+        tea_name: 'Erich Tea',
+        type: 1,
+        description: 'Wonderful.',
         north_america_native: false,
-        url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
+        url: 'https://placekitten.com/200/200',
+        owner_id: 1
+      };
+
+      const expectedGet = {
+        id: expect.any(Number),
+        tea_name: 'Erich Tea',
+        tea_type: 'black',
+        description: 'Wonderful.',
+        north_america_native: false,
+        url: 'https://placekitten.com/200/200',
         owner_id: 1
       };
 
@@ -153,11 +190,11 @@ describe('app routes', () => {
         .post('/teas')
         .send({
           id: expect.any(Number),
-          tea_name: 'Darjeeling',
-          type: 'Black',
-          description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
+          tea_name: 'Erich Tea',
+          type: 1,
+          description: 'Wonderful.',
           north_america_native: false,
-          url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
+          url: 'https://placekitten.com/200/200',
           owner_id: 1
         })
         .expect('Content-Type', /json/)
@@ -168,17 +205,53 @@ describe('app routes', () => {
         .expect('Content-Type', /json/)
         .expect(200);
       
-      expect(returningData.body).toEqual(expectation);
-      expect(trueData.body).toEqual(expect.arrayContaining([expectation]));
+      expect(returningData.body).toEqual(expectedReturn);
+      expect(trueData.body).toEqual(expect.arrayContaining([expectedGet]));
+    });
+
+    // Test POST
+    test('creates a new tea_types table row', async() => {
+
+      const expected = {
+        id: expect.any(Number),
+        tea_type: 'fruit'
+      };
+
+      const returningData = await fakeRequest(app)
+        .post('/tea-types')
+        .send({
+          id: expect.any(Number),
+          tea_type: 'fruit'
+        })
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      const trueData = await fakeRequest(app)
+        .get('/tea-types')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      expect(returningData.body).toEqual(expected);
+      expect(trueData.body).toEqual(expect.arrayContaining([expected]));
     });
 
     // TEST put
     test('updates a table row', async() => {
 
-      const expectation = {
+      const expectedReturn = {
         id: 2,
         tea_name: 'Turkey Breakfast',
-        type: 'Black',
+        type: 1,
+        description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
+        north_america_native: false,
+        url: 'https://cdnimg.webstaurantstore.com/images/products/large/542790/1993727.jpg',
+        owner_id: 1
+      };
+
+      const expectedGet = {
+        id: 2,
+        tea_name: 'Turkey Breakfast',
+        tea_type: 'black',
         description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
         north_america_native: false,
         url: 'https://cdnimg.webstaurantstore.com/images/products/large/542790/1993727.jpg',
@@ -190,7 +263,7 @@ describe('app routes', () => {
         .send({
           id: 2,
           tea_name: 'Turkey Breakfast',
-          type: 'Black',
+          type: 1,
           description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
           north_america_native: false,
           url: 'https://cdnimg.webstaurantstore.com/images/products/large/542790/1993727.jpg',
@@ -205,8 +278,8 @@ describe('app routes', () => {
         .expect(200);
       
       
-      expect(returningData.body).toEqual(expectation);
-      expect(trueData.body).toEqual(expect.arrayContaining([expectation]));
+      expect(returningData.body).toEqual(expectedReturn);
+      expect(trueData.body).toEqual(expect.arrayContaining([expectedGet]));
     });
 
     // https://zellwk.com/blog/endpoint-testing/
@@ -217,7 +290,7 @@ describe('app routes', () => {
         .put('/teas/2')
         .send({
           id: 2,
-          type: 'Black',
+          tea_type: 'black',
           description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
           north_america_native: false,
           url: 'https://cdnimg.webstaurantstore.com/images/products/large/542790/1993727.jpg',
@@ -237,7 +310,7 @@ describe('app routes', () => {
         .send({
           id: 2,
           // tea_name: 'Turkey Breakquick
-          type: 'Black',
+          tea_type: 'black',
           description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
           north_america_native: false,
           url: 'https://cdnimg.webstaurantstore.com/images/products/large/542790/1993727.jpg',
@@ -257,7 +330,7 @@ describe('app routes', () => {
         .send({
           id: 2,
           // tea_name: 'Turkey Breakquick
-          type: 'Black',
+          tea_type: 'black',
           description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
           north_america_native: false,
           url: 'https://cdnimg.webstaurantstore.com/images/products/large/542790/1993727.jpg',
@@ -276,7 +349,7 @@ describe('app routes', () => {
         .post('/teas/')
         .send({
           id: 2,
-          type: 'Black',
+          tea_type: 'black',
           description: 'Has a rich and hearty flavor and is often enjoyed with milk and sugar.',
           north_america_native: false,
           url: 'https://cdnimg.webstaurantstore.com/images/products/large/542790/1993727.jpg',

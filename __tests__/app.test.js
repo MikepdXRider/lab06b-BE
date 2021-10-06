@@ -63,7 +63,7 @@ describe('app routes', () => {
         {
           id: 3,
           tea_name: 'Matcha',
-          description: 'matcha desciption',
+          description: 'matcha',
           url: 'https://www.nishikidori.com/579-large_default/organic-matcha-tea-from-nishio-aichi-premium-quality.jpg',
           tea_type: 'green',
           north_america_native: false,
@@ -79,103 +79,47 @@ describe('app routes', () => {
           owner_id: 1
         }
       ];
-
+      
       const data = await fakeRequest(app)
         .get('/teas')
         .expect('Content-Type', /json/)
         .expect(200);
-
+      
       expect(data.body).toEqual(expectation);
     });
+    
 
     // returns all tea_types
     test('returns tea-types w/ joined data', async() => {
-
+      
       const expectation = [
         { id: 1, tea_type: 'black' },
         { id: 2, tea_type: 'green' },
         { id: 3, tea_type: 'herbal' }
       ];
-
+      
       const data = await fakeRequest(app)
         .get('/tea-types')
         .expect('Content-Type', /json/)
         .expect(200);
-
-      expect(data.body).toEqual(expectation);
-    });
-
-    // returns a single tea per ID
-    test('returns tea per ID w/ joined data', async() => {
-
-      const expectation = {
-        id: 1,
-        tea_name: 'Darjeeling',
-        description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
-        url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
-        tea_type: 'black',
-        north_america_native: false,
-        owner_id: 1
-      };
-
-      const data = await fakeRequest(app)
-        .get('/teas/1')
-        .expect('Content-Type', /json/)
-        .expect(200);
-
-      expect(data.body).toEqual(expectation);
-    });
-
-    // Test DELETE
-    test('deletes teas table row per ID', async() => {
-
-      const expectedReturn = {
-        id: expect.any(Number),
-        tea_name: 'Darjeeling',
-        type: 1,
-        description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
-        north_america_native: false,
-        url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
-        owner_id: 1
-      };
-
-      const expectedGet = {
-        id: expect.any(Number),
-        tea_name: 'Darjeeling',
-        tea_type: 'black',
-        description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
-        north_america_native: false,
-        url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
-        owner_id: 1
-      };
-
-      const data = await fakeRequest(app)
-        .delete('/teas/1')
-        .expect('Content-Type', /json/)
-        .expect(200);
       
-      const data2 = await fakeRequest(app)
-        .get('/teas')
-        .expect('Content-Type', /json/)
-        .expect(200);
-
-      expect(data.body).toEqual(expectedReturn);
-      expect(data2.body).toEqual(expect.not.arrayContaining([expectedGet]));
+      expect(data.body).toEqual(expectation);
     });
 
-    // Test POST
+    
+    // Test POST to teas
     test('creates a new teas table row', async() => {
-
+      
       const expectedReturn = {
         id: expect.any(Number),
         tea_name: 'Erich Tea',
-        type: 1,
+        type_id: 1,
         description: 'Wonderful.',
         north_america_native: false,
         url: 'https://placekitten.com/200/200',
         owner_id: 1
       };
-
+      
       const expectedGet = {
         id: expect.any(Number),
         tea_name: 'Erich Tea',
@@ -185,13 +129,13 @@ describe('app routes', () => {
         url: 'https://placekitten.com/200/200',
         owner_id: 1
       };
-
+      
       const returningData = await fakeRequest(app)
         .post('/teas')
         .send({
           id: expect.any(Number),
           tea_name: 'Erich Tea',
-          type: 1,
+          type_id: 1,
           description: 'Wonderful.',
           north_america_native: false,
           url: 'https://placekitten.com/200/200',
@@ -199,7 +143,7 @@ describe('app routes', () => {
         })
         .expect('Content-Type', /json/)
         .expect(200);
-  
+      
       const trueData = await fakeRequest(app)
         .get('/teas')
         .expect('Content-Type', /json/)
@@ -208,34 +152,31 @@ describe('app routes', () => {
       expect(returningData.body).toEqual(expectedReturn);
       expect(trueData.body).toEqual(expect.arrayContaining([expectedGet]));
     });
+    
 
-    // Test POST
-    test('creates a new tea_types table row', async() => {
-
-      const expected = {
-        id: expect.any(Number),
-        tea_type: 'fruit'
+    // returns a single tea per ID
+    test('returns tea per ID w/ joined data', async() => {
+      
+      const expectation = {
+        id: 6,
+        tea_name: 'Erich Tea',
+        description: 'Wonderful.',
+        url: 'https://placekitten.com/200/200',
+        tea_type: 'black',
+        north_america_native: false,
+        owner_id: 1
       };
-
-      const returningData = await fakeRequest(app)
-        .post('/tea-types')
-        .send({
-          id: expect.any(Number),
-          tea_type: 'fruit'
-        })
-        .expect('Content-Type', /json/)
-        .expect(200);
-
-      const trueData = await fakeRequest(app)
-        .get('/tea-types')
+      
+      const data = await fakeRequest(app)
+        .get('/teas/6')
         .expect('Content-Type', /json/)
         .expect(200);
       
-      expect(returningData.body).toEqual(expected);
-      expect(trueData.body).toEqual(expect.arrayContaining([expected]));
+      expect(data.body).toEqual(expectation);
     });
+    
 
-    // TEST put
+    // TEST put to teas
     test('updates a table row', async() => {
 
       const expectedReturn = {
@@ -282,6 +223,72 @@ describe('app routes', () => {
       expect(trueData.body).toEqual(expect.arrayContaining([expectedGet]));
     });
 
+
+    // Test DELETE on teas
+    test('deletes teas table row per ID', async() => {
+      
+      const expectedReturn = {
+        id: expect.any(Number),
+        tea_name: 'Darjeeling',
+        type: 1,
+        description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
+        north_america_native: false,
+        url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
+        owner_id: 1
+      };
+      
+      const expectedGet = {
+        id: expect.any(Number),
+        tea_name: 'Darjeeling',
+        tea_type: 'black',
+        description: 'Derivative of Black Tea with a light, nutty taste to it and a floral smell.',
+        north_america_native: false,
+        url: 'https://cdn.shopify.com/s/files/1/0415/5182/3016/articles/5e62a4da51beefb68fbc4ae0_AdobeStock_317029222_1024x1024.jpeg?v=1596741272',
+        owner_id: 1
+      };
+      
+      const data = await fakeRequest(app)
+        .delete('/teas/1')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      const data2 = await fakeRequest(app)
+        .get('/teas')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      expect(data.body).toEqual(expectedReturn);
+      expect(data2.body).toEqual(expect.not.arrayContaining([expectedGet]));
+    });
+    
+
+    // Test POST to tea_types
+    test('creates a new tea_types table row', async() => {
+
+      const expected = {
+        id: expect.any(Number),
+        tea_type: 'fruit'
+      };
+
+      const returningData = await fakeRequest(app)
+        .post('/tea-types')
+        .send({
+          id: expect.any(Number),
+          tea_type: 'fruit'
+        })
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      const trueData = await fakeRequest(app)
+        .get('/tea-types')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      expect(returningData.body).toEqual(expected);
+      expect(trueData.body).toEqual(expect.arrayContaining([expected]));
+    });
+
+
     // https://zellwk.com/blog/endpoint-testing/
     // test PUT throws 500 error
     test('put throws 500 error caused by a missing property', async() => {
@@ -301,6 +308,7 @@ describe('app routes', () => {
       
       expect(returningData.status).toBe(500);
     });
+
 
     // test PUT throws 400 error
     test('put throws 400 error caused by a mispelled endpoint', async() => {
@@ -322,6 +330,7 @@ describe('app routes', () => {
       expect(returningData.status).toBe(404);
     });
 
+
     // test POST throws 400 error
     test('post throws 400 error caused by a mispelled endpoint', async() => {
 
@@ -342,6 +351,7 @@ describe('app routes', () => {
       expect(returningData.status).toBe(404);
     });
 
+
     // test POST throws 500 error
     test('post throws 500 error caused by a missing property', async() => {
 
@@ -361,6 +371,7 @@ describe('app routes', () => {
       expect(returningData.status).toBe(500);
     });
     
+
     // test delete throws 400 error
     test('delete throws 400 error caused by a mispelled endpoint', async() => {
 
@@ -371,6 +382,7 @@ describe('app routes', () => {
       
       expect(returningData.status).toBe(404);
     });
+
 
     // test get throws 400 error
     test('get all throws 400 error caused by a mispelled endpoint', async() => {
@@ -383,6 +395,7 @@ describe('app routes', () => {
       expect(returningData.status).toBe(404);
     });
 
+
     // test get by ID throws 400 error
     test('get by id throws 400 error caused by a mispelled endpoint', async() => {
 
@@ -393,6 +406,7 @@ describe('app routes', () => {
       
       expect(returningData.status).toBe(404);
     });
+
 
     // Can't figure out how to test a 500 error on a delete or get requests.
   });

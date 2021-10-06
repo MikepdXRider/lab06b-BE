@@ -6,6 +6,8 @@ const teas = require('./tea-data.js');
 const teaTypes = require('./tea-type-data.js');
 const usersData = require('./users.js');
 const { getEmoji } = require('../lib/emoji.js');
+const retrieveTeaTypeId = require('../lib/utils.js');
+// const retrieveTeaTypeId = require('../lib/utils.js');
 run();
 
 async function run() {
@@ -42,12 +44,14 @@ async function run() {
     
     // Populates teas sql table with teas information.
     await Promise.all(
-      teas.map(tea => {
+      teas.map(async tea => {
+        // ❗ import a function from utils.js here which takes in the tea.type, makes a query to SQL DB for tea_types.id where tea_types.tea_type = tea.type. Return the ID and save it to a variable.
+        const teaTypeId = await retrieveTeaTypeId(tea.type_id);
         return client.query(`
-                    INSERT INTO teas (tea_name, type, description, north_america_native, url, owner_id)
+                    INSERT INTO teas (tea_name, type_id, description, north_america_native, url, owner_id)
                     VALUES ($1, $2, $3, $4, $5, $6);
                 `,
-        [tea.tea_name, tea.type, tea.description, tea.north_america_native, tea.url, user.id]);
+        [tea.tea_name, teaTypeId, tea.description, tea.north_america_native, tea.url, user.id]);
       })
     );
     
